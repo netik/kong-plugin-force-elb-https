@@ -3,10 +3,10 @@
 
 ## What it does
 
-This plujgin redirects clients connecting to your site to the HTTPS
+This plugin redirects clients connecting to your site to the HTTPS
 version of your site examining a configurable request header. Unless
-the header matches an expected value, a 301 redirect will be
-issued. It defaults to examining the `X-Forwarded-Proto` header,
+the header matches an expected value, a redirect will be issued. 
+It defaults to examining the `X-Forwarded-Proto` header,
 looking for the string "https".
 
 ## Why?
@@ -42,6 +42,15 @@ will strip off the URI. The default behavior is to redirect to
 
 `ignore_uris` will disable this plugin for any uri that starts with
 the desired paths. Remember to start paths with `/` !
+
+## Rebuilding
+
+If you need to rebuild this plugin install luarocks, and do:
+
+`luarocks make`
+
+
+## Configuration
 
 form parameter|required|description
 ---|---|---
