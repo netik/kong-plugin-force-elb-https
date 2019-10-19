@@ -50,3 +50,4 @@ form parameter|required|description
 `ignore_uris`|*optional*|Anything starting with these paths is ignored by the plugin. (default: none)
 `redirect_if_unset`|*optional*|If the `X-Forwarded-Proto` header is absent, force redirection to HTTPS. (default: false)
 `strip_uri`|*optional*|During redirection, strip off the URI from the URL. (default: false)
+`redirect_http_code`|*optional*|Which HTTP code to send when redirecting. One of 301, 302, 303, or 307 (default: 301)
