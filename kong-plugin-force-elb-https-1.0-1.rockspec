@@ -8,9 +8,6 @@ description = {
   summary = "A Kong plugin that will redirect to HTTPS if X-Forwarded-Proto is http. For use with Amazon AWS ELB.",
   license = "MIT"
 }
-dependencies = {
-  "lua ~> 5.1"
-}
 build = {
   type = "builtin",
   modules = {
