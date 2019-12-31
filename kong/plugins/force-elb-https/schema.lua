@@ -7,7 +7,7 @@ return {
     ignore_uris = { type = "array", default = {} },
     redirect_if_unset = { type = "bool", default = false },
     strip_uri = { type = "bool", default = false },
-    redirect_http_code = {type = "array", enum = {"301", "302", "303", "307"}, default = "301"}
+    redirect_http_code = {type = "number", enum = {301, 302, 303, 307}, default = 301}
   },
   self_check = function(schema, plugin_t, dao, is_update)
     if not plugin_t.redirect_to then
