@@ -1,12 +1,12 @@
 package = "kong-plugin-force-elb-https"
-version = "1.0-1"
+version = "2.0-1"
 
 local pluginName = package:match("^kong%-plugin%-(.+)$")  -- "force-elb-https"
 supported_platforms = {"linux", "macosx"}
 
 source = {
    url = "git://github.com/netik/kong-plugin-force-elb-https",
-   tag = "v1.0",
+   tag = "v2.0-1",
 }
 
 dependencies = {
