@@ -1,46 +1,70 @@
-return {
-  no_consumer = true,
+local typedefs = require "kong.db.schema.typedefs"
+
+local PLUGIN_NAME = "force-elb-https"
+
+local REDIRECT_CODES = {301, 302, 303, 307}
+
+local schema = {
+  name = PLUGIN_NAME,
+
   fields = {
-    redirect_to = { type = "string", default = "" },
-    header = { type = "string", default = "X-Forwarded-Proto" },
-    expected_value = { type = "string", default = "https" },
-    ignore_uris = { type = "array", default = {} },
-    redirect_if_unset = { type = "bool", default = false },
-    strip_uri = { type = "bool", default = false },
-    redirect_http_code = {type = "number", enum = {301, 302, 303, 307}, default = 301}
-  },
-  self_check = function(schema, plugin_t, dao, is_update)
-    if not plugin_t.redirect_to then
-       ngx.log(ngx.NOTICE, "force-elb-https: redirect domain missing")
-       return false, "redirect_domain cannot be blank"
-    end
-
-    if plugin_t.redirect_to == "" then
-       ngx.log(ngx.NOTICE, "force-elb-https: redirect domain blank")
-       return false, "redirect_domain cannot be blank"
-    end
-
-    if not plugin_t.header then
-       ngx.log(ngx.NOTICE, "force-elb-https: header missing")
-       return false, "header cannot be blank"
-    end
-
-    if plugin_t.header == "" then
-       ngx.log(ngx.NOTICE, "force-elb-https: header cannot be blank")
-       return false, "header cannot be blank"
-    end
-
-    if not plugin_t.expected_value then
-       ngx.log(ngx.NOTICE, "force-elb-https: expected_value missing")
-       return false, "expected_value cannot be blank"
-    end
-
-    if plugin_t.expected_value == "" then
-       ngx.log(ngx.NOTICE, "force-elb-https: expected_value cannot be blank")
-       return false, "expected_value cannot be blank"
-    end
-
-    return true
-  end
+    { consumer = typedefs.no_consumer },
+    { protocols = typedefs.protocols_http },
+    { config = {  
+      type = "record",
+      fields = {
+        { redirect_to = { 
+            type = "string", 
+            required=true, 
+            description = "Where to redirect the user to if match fails." 
+          } 
+        },
+        { header = {
+            type="string",
+            description = "The header to examine.",
+            required=true,
+            default = "X-Forwarded-Proto"
+          }
+        },
+        { expected_value = {
+            type="string",
+            description = "The value to match against the header.",
+            required=true,
+            default = "https"
+          }
+        },
+        { ignore_uris = {
+            type="array",
+            description = "A list of URIs to ignore.",
+            elements = { type = "string" }
+          }
+        },
+        { redirect_if_unset = {
+            type="boolean",
+            description = "If the header is not set, should we redirect?",
+            default = false
+          }
+        },
+        { strip_uri = {
+            type="boolean",
+            description = "Should we strip the URI before redirecting?",
+            default = false
+          }
+        },
+        { redirect_http_code = {
+            type="number",
+            description = "The HTTP code to use for the redirect.",
+            one_of = REDIRECT_CODES,
+            required=true,
+            default = 301
+          }
+        }
+      }
+    }
+   }
+  }
 }
+
+return schema
+
 

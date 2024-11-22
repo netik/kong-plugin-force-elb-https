@@ -1,20 +1,13 @@
-local BasePlugin = require "kong.plugins.base_plugin"
-local responses = require "kong.tools.responses"
 local req_set_header = ngx.req.set_header
 local ngx_re_gmatch = ngx.re.gmatch
 
-local ForceHTTPSHandler = BasePlugin:extend()
-
 -- want this to be very low and run first if possible. we run after ip-restriction in the stack
-ForceHTTPSHandler.PRIORITY = 2750
-ForceHTTPSHandler.VERSION = "0.1"
+local plugin = {
+ PRIORITY = 2750,
+ VERSION = "0.2",
+}
 
-function ForceHTTPSHandler:new()
-  ForceHTTPSHandler.super.new(self, "force-elb-https")
-end
-
-function ForceHTTPSHandler:access(conf)
-  ForceHTTPSHandler.super.access(self)
+function plugin:access(conf)
 
   -- should we pass?
   if conf.ignore_uris then 
@@ -58,4 +51,4 @@ function ForceHTTPSHandler:access(conf)
   return ngx.redirect(https_url, conf.redirect_http_code)
 end
 
-return ForceHTTPSHandler
+return plugin
